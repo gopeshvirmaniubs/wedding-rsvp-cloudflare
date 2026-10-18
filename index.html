@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gopesh & Prachi | Wedding RSVP</title>
+<style>
+:root{--ink:#302820;--gold:#9a7744;--paper:#fbf8f1;--line:#e5dccd;--muted:#756b60}*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:760px;margin:auto;padding:24px 16px 48px}.hero{text-align:center;padding:30px 12px 24px;border-bottom:1px solid var(--line);background:radial-gradient(ellipse at top,#f3e6cf 0%,#fbf8f1 68%);border-radius:0 0 22px 22px}
+.hero:before{content:'✦  ❀  ✦';display:block;color:var(--gold);letter-spacing:.45em;font-size:18px;margin-bottom:8px}.hero:after{content:'❧';display:block;color:var(--gold);font-size:26px;line-height:1;margin-top:12px}
+.eyebrow{letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:var(--gold);font-weight:700}h1{font-family:Georgia,serif;font-weight:500;font-size:clamp(32px,7vw,52px);line-height:1.08;margin:12px 0}h2{font-family:Georgia,serif;font-weight:500;margin:0 0 12px;font-size:24px}
+.sub,.small{color:var(--muted)}.small{font-size:12px}.card{background:#fffdf9;border:1px solid var(--line);border-radius:16px;padding:22px;margin:18px 0}
+label{display:block;font-weight:650;margin:14px 0 7px}input:not([type=checkbox]):not([type=radio]),select,textarea{width:100%;padding:12px;border:1px solid #d7cbbb;border-radius:9px;background:white;color:var(--ink);font:inherit}
+.check label,.party-option{display:flex;align-items:center;gap:10px;font-weight:500}.party-options{display:grid;gap:8px}.party-option{padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff}
+input[type=checkbox],input[type=radio]{accent-color:var(--gold);width:18px;height:18px}.btn{display:inline-block;border:0;border-radius:10px;background:var(--ink);color:#fff;padding:13px 18px;font:inherit;font-weight:700;cursor:pointer}.full{width:100%;margin-top:16px}.flash{padding:12px;background:#f4ead7;border-radius:10px;margin:12px 0}a{color:var(--gold)}[hidden]{display:none!important}
+</style></head><body><main class="wrap">
+<header class="hero"><div class="eyebrow">Together with our families</div><h1>Gopesh &amp; Prachi</h1><p>invite you to celebrate their wedding</p><p><strong>4–5 December 2026</strong></p></header>
+<div id="message" role="status" class="flash" hidden></div>
+<section class="card"><h2>You’re invited</h2><p class="sub">Please let us know which celebrations you can join.</p>
+<form id="rsvp">
+<label for="name">Your full name *</label><input id="name" name="name" required maxlength="100" autocomplete="name" placeholder="Enter your name">
+<label for="phone">Mobile number *</label><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required maxlength="25" placeholder="Include country code if needed">
+<p class="small">Used only to identify your RSVP and prevent duplicate entries. The website cannot read your WhatsApp number automatically.</p>
+<div class="card"><h2>4 December · Shagun, Engagement &amp; Sangeet</h2><div class="check"><label><input type="checkbox" name="dec4" value="yes"> I/we will attend</label></div></div>
+<div class="card"><h2>5 December · Wedding</h2><div class="check"><label><input type="checkbox" name="dec5" value="yes"> I/we will attend</label></div></div>
+<label>What’s your wedding squad situation? 😄</label><div class="party-options">
+<label class="party-option"><input type="radio" name="party_vibe" value="family" required> 👨‍👩‍👧‍👦 Rolling in with family</label>
+<label class="party-option"><input type="radio" name="party_vibe" value="better_half"> 💑 Bringing my better half</label>
+<label class="party-option"><input type="radio" name="party_vibe" value="potential"> 😉 Coming solo… open to a plot twist</label>
+<label class="party-option"><input type="radio" name="party_vibe" value="solo"> 🕺 Flying solo, just here to celebrate</label></div>
+<div id="guest-count-wrap" hidden><label id="guest-count-label" for="plus_ones">How many family members are joining you?</label><select id="plus_ones" name="plus_ones"></select>
+<div id="companions-wrap"><label id="companions-label" for="companions">Names (optional)</label><input id="companions" name="companions" maxlength="400" placeholder="e.g. family members"></div></div>
+<label for="notes">Anything we should know? (optional)</label><textarea id="notes" name="notes" rows="2" maxlength="500" placeholder="Dietary or other notes"></textarea>
+<button class="btn full" type="submit">Confirm my RSVP</button></form></section>
+<p class="small" id="sender-note"></p><p class="small" style="text-align:center"><a href="/admin.html">Admin sign in</a></p>
+</main>
+<script>
+const params=new URLSearchParams(location.search), sender=(params.get('from')||'General link').slice(0,80), side=(params.get('side')||'Not specified').slice(0,40);
+const maxPeople=Math.max(1,Math.min(7,parseInt(params.get('max')||'7',10)||7));
+document.querySelector('#sender-note').textContent='Invitation shared by: '+sender+' · For changes, submit again using the same mobile number.';
+const count=document.querySelector('#plus_ones');for(let i=0;i<maxPeople;i++){let o=document.createElement('option');o.value=i;o.textContent=i;count.append(o)}
+function partyChanged(){const v=document.querySelector('[name=party_vibe]:checked')?.value,wrap=document.querySelector('#guest-count-wrap'),lab=document.querySelector('#guest-count-label'),companions=document.querySelector('#companions'),count=document.querySelector('#plus_ones');wrap.hidden=!['family','better_half'].includes(v);count.hidden=v==='better_half';lab.hidden=v==='better_half';count.required=v==='family';if(v==='better_half'){count.value='1';lab.textContent='';document.querySelector('#companions-label').textContent='Their name (optional)';companions.placeholder='Your better half’s name'}else if(v==='family'){count.value='0';lab.textContent='How many family members are joining you?';document.querySelector('#companions-label').textContent='Names (optional)';companions.placeholder='e.g. family members'}else{count.value='0';companions.value=''}}
+document.querySelectorAll('[name=party_vibe]').forEach(x=>x.addEventListener('change',partyChanged));
+document.querySelector('#rsvp').addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget, data=Object.fromEntries(new FormData(f));data.dec4=!!data.dec4;data.dec5=!!data.dec5;data.sender=sender;data.side=side;data.max_people=maxPeople;const msg=document.querySelector('#message');try{const r=await fetch('/api/rsvp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const out=await r.json();if(!r.ok)throw new Error(out.error||'Could not save your response.');location.href='/thanks.html'}catch(err){msg.hidden=false;msg.textContent=err.message}});
+</script></body></html>

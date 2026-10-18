@@ -1,0 +1,24 @@
+CREATE TABLE IF NOT EXISTS guests (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ name TEXT NOT NULL,
+ phone TEXT NOT NULL UNIQUE,
+ side TEXT NOT NULL DEFAULT 'Not specified',
+ invited_by TEXT NOT NULL DEFAULT 'General link',
+ dec4 INTEGER NOT NULL DEFAULT 0,
+ dec5 INTEGER NOT NULL DEFAULT 0,
+ plus_ones INTEGER NOT NULL DEFAULT 0,
+ party_vibe TEXT NOT NULL DEFAULT 'solo',
+ companions TEXT NOT NULL DEFAULT '',
+ notes TEXT NOT NULL DEFAULT '',
+ created_at TEXT NOT NULL,
+ updated_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS companion_links (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ guest_id INTEGER NOT NULL,
+ companion_guest_id INTEGER NOT NULL,
+ status TEXT NOT NULL DEFAULT 'suggested',
+ UNIQUE(guest_id, companion_guest_id),
+ FOREIGN KEY(guest_id) REFERENCES guests(id) ON DELETE CASCADE,
+ FOREIGN KEY(companion_guest_id) REFERENCES guests(id) ON DELETE CASCADE
+);
